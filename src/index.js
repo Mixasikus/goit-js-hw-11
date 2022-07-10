@@ -1,8 +1,7 @@
 import NewApiService from './newsService';
 import Notiflix from 'notiflix';
 import { buildPixabayMarcup } from './buildPixabayMarcup';
-
-// import { onLoadMore } from '../onLoadMore';
+import { loadMoreBtn } from './loadMoreBtn';
 import '../src/sass/_example.scss';
 
 const refs = {
@@ -22,8 +21,6 @@ refs.inputValue.addEventListener('submit', searchPixabay);
 async function searchPixabay(e) {
   e.preventDefault();
 
-  refs.pixabayContainer.insertAdjacentHTML('beforeend', onLoadMore);
-
   newsApiService.query = e.currentTarget.elements.searchQuery.value.trim();
 
   newsApiService.fetchArticles().then(search => {
@@ -34,6 +31,7 @@ async function searchPixabay(e) {
     if (newsApiService.query === '') {
       return Notiflix.Notify.failure('The search string must not be empty.');
     }
+    // refs.pixabayContainer.insertAdjacentHTML('beforeend', loadMoreBtn);
 
     clearArticlesContainer();
 
