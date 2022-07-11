@@ -2,7 +2,7 @@ import '../src/sass/_example.scss';
 import { buildPixabayMarcup } from './buildPixabayMarcup';
 import NewApiService from './newsService';
 import Notiflix from 'notiflix';
-import LoadMoreBtn from './LoadMoreBtn';
+import LoadMoreBtn from '../src/LoadMoreBtn';
 
 const refs = {
   inputValue: document.querySelector('.search-form'),
