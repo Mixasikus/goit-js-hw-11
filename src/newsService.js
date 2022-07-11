@@ -14,7 +14,6 @@ export default class NewsApiService {
     )
       .then(res => {
         this.incrementPage();
-        // console.log(res);
         if (!res.ok) {
           throw new Error(res.statusText);
         }

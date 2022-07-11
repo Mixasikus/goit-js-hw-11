@@ -1,25 +1,30 @@
+import '../src/sass/_example.scss';
+import { buildPixabayMarcup } from './buildPixabayMarcup';
 import NewApiService from './newsService';
 import Notiflix from 'notiflix';
-import { buildPixabayMarcup } from './buildPixabayMarcup';
-import { loadMoreBtn } from './loadMoreBtn';
-import '../src/sass/_example.scss';
+import LoadMoreBtn from './LoadMoreBtn';
 
 const refs = {
   inputValue: document.querySelector('.search-form'),
   pixabayContainer: document.querySelector('.gallery'),
-  // loadMoreBtn: document.querySelector('.load-more'),
 };
 
-// refs.loadMoreBtn.disabled = true;
-
-const newsApiService = new NewApiService();
+const loadMoreBtn = new LoadMoreBtn({
+  selector: '[data-action="load-more"]',
+  hidden: true,
+});
 
 refs.inputValue.addEventListener('submit', searchPixabay);
 
-// refs.loadMoreBtn.addEventListener('click', onLoadMore());
+loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
+
+const newsApiService = new NewApiService();
 
 async function searchPixabay(e) {
   e.preventDefault();
+
+  loadMoreBtn.show();
+  loadMoreBtn.disabled();
 
   newsApiService.query = e.currentTarget.elements.searchQuery.value.trim();
 
@@ -31,7 +36,7 @@ async function searchPixabay(e) {
     if (newsApiService.query === '') {
       return Notiflix.Notify.failure('The search string must not be empty.');
     }
-    // refs.pixabayContainer.insertAdjacentHTML('beforeend', loadMoreBtn);
+    loadMoreBtn.enable();
 
     clearArticlesContainer();
 
@@ -47,16 +52,19 @@ async function searchPixabay(e) {
 }
 
 async function onLoadMore() {
+  loadMoreBtn.disabled();
+
   newsApiService
     .fetchArticles()
-    .then(search =>
+    .then(search => {
       search.map(hits =>
         refs.pixabayContainer.insertAdjacentHTML(
           'beforeend',
           buildPixabayMarcup(hits)
         )
-      )
-    )
+      );
+      loadMoreBtn.enable();
+    })
     .catch(error => {
       console.log(error);
     });
